@@ -5,4 +5,3 @@ pandas==2.2.2
 tensorflow-cpu==2.13.0
 protobuf==3.20.3
 h5py==3.10.0
-python-3.10.11
