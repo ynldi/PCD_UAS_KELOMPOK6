@@ -1,25 +1,22 @@
 streamlit==1.41.1
 
 # Core
-numpy==1.26.4
+numpy==1.23.5
 pandas==2.2.3
 pillow==10.2.0
 
-# TensorFlow + Keras lama (PALING KOMPATIBEL UNTUK MODEL .H5)
-tensorflow-cpu==2.15.0
-keras==2.15.0
-h5py==3.10.0
+# TensorFlow + Keras versi stabil untuk model .h5
+tensorflow==2.9.3
+keras==2.9.0
+h5py==3.7.0
 
-# Dependencies lama supaya tidak memaksa Keras 3
-protobuf==3.20.3
-grpcio==1.56.2
+# Dependency kompatibel
+protobuf==3.19.6
 gast==0.4.0
-opt_einsum==3.3.0
-astunparse==1.6.3
-flatbuffers==23.5.26
 google-pasta==0.2.0
+opt_einsum==3.3.0
+flatbuffers==2.0
 wrapt==1.14.1
-typing_extensions==4.8.0
 
 # Misc
 requests==2.32.3
