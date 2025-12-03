@@ -4,8 +4,8 @@ numpy==1.26.4
 pandas==2.2.3
 pillow==10.2.0
 
-tensorflow==2.13.0
-keras==2.13.1
+tensorflow==2.15.0
+keras==2.15.0
 
 h5py==3.10.0
 protobuf==4.25.3
