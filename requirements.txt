@@ -6,7 +6,7 @@ pandas==2.2.3
 pillow==10.2.0
 
 # TensorFlow + dependencies (compatible with Python 3.10)
-tensorflow-cpu==2.13.0
+tensorflow-cpu==2.15.0
 h5py==3.10.0
 protobuf==3.20.3
 grpcio==1.56.2
@@ -20,3 +20,4 @@ wrapt==1.14.1
 
 # Misc
 requests==2.32.3
+
