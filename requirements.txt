@@ -1,21 +1,19 @@
 streamlit==1.41.1
-numpy==2.0.2
+numpy==1.26.4
 pandas==2.2.3
 pillow==11.1.0
 
-tensorflow==2.18.0
-tensorflow-io-gcs-filesystem==0.31.0
-h5py==3.12.1
+tensorflow==2.15.0
+h5py==3.10.0
 
-protobuf==5.29.3
-grpcio==1.70.0
-opt_einsum==3.4.0
+protobuf==3.20.3
+grpcio==1.56.2
+opt_einsum==3.3.0
 astunparse==1.6.3
-flatbuffers==25.1.24
-gast==0.6.0
+flatbuffers==23.5.26
+gast==0.5.4
 google-pasta==0.2.0
-ml-dtypes==0.4.1
-wrapt==1.17.2
+wrapt==1.14.1
 
 requests==2.32.3
 typing_extensions==4.12.2
