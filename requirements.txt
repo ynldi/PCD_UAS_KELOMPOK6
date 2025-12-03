@@ -1,7 +1,7 @@
 streamlit==1.41.1
 tensorflow==2.18.0
-pillow
-numpy
-pandas
-altair
-h5py
+pillow==10.4.0
+numpy==1.26.4
+pandas==2.2.3
+altair==5.4.1
+h5py==3.11.0
