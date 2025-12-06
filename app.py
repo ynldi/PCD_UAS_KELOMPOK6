@@ -51,7 +51,7 @@ def extract_model_zip():
     if os.path.exists("cnn_model.h5"):
         return
     if not os.path.exists(zip_path):
-        st.error(f"File ZIP tidak ditemukan: {zip_path}")
+        st.error("File ZIP tidak ditemukan.")
         st.stop()
     try:
         with zipfile.ZipFile(zip_path, 'r') as zip_ref:
@@ -151,29 +151,38 @@ def clear_history():
 if os.path.exists("banner.png"):
     st.image("banner.png", use_container_width=True)
 
-st.title("🥕 Fruits and Vegetables Classification")
+# Pilihan bahasa
+lang = st.sidebar.radio("Bahasa / Language:", ["Indonesia", "English"])
+
+title_text = "🥕 Klasifikasi Buah & Sayur" if lang == "Indonesia" else "🥕 Fruits and Vegetables Classification"
+st.title(title_text)
 
 st.sidebar.title("🔧 Pengaturan & Input")
-menu_choice = st.sidebar.radio("Pilih metode input:", ["Upload Gambar", "Kamera", "📊 Data Prediksi"])
-show_prob = st.sidebar.checkbox("Tampilkan tabel probabilitas", True)
+menu_choice = st.sidebar.radio("Pilih metode input:" if lang == "Indonesia" else "Choose input method:",
+                               ["Upload Gambar" if lang == "Indonesia" else "Upload Image",
+                                "Kamera" if lang == "Indonesia" else "Camera",
+                                "📊 Data Prediksi" if lang == "Indonesia" else "📊 Prediction Data"])
+
+show_prob = st.sidebar.checkbox("Tampilkan tabel probabilitas" if lang == "Indonesia" else "Show probability table", True)
 st.sidebar.markdown("---")
-st.sidebar.write(f"Model input size: **{IMG_SIZE[0]}×{IMG_SIZE[1]}**")
+st.sidebar.write(f"Ukuran input model: **{IMG_SIZE[0]}×{IMG_SIZE[1]}**" if lang == "Indonesia" else f"Model input size: **{IMG_SIZE[0]}×{IMG_SIZE[1]}**")
 
 # --- Menu Upload File ---
-if menu_choice == "Upload Gambar":
-    st.header("📂 Upload Gambar")
-    uploaded = st.file_uploader("Upload gambar buah/sayur:", type=["jpg", "jpeg", "png"])
+if menu_choice.startswith("Upload"):
+    st.header("📂 Upload Gambar" if lang == "Indonesia" else "📂 Upload Image")
+    uploaded = st.file_uploader("Upload gambar buah/sayur:" if lang == "Indonesia" else "Upload fruit/vegetable image:",
+                                type=["jpg", "jpeg", "png"])
     if uploaded:
         try:
             img = Image.open(uploaded)
-            st.image(img, caption="Gambar diupload", use_container_width=True)
-            if st.button("🔍 Prediksi dari Upload"):
-                with st.spinner("Memproses..."):
+            st.image(img, caption="Gambar diupload" if lang == "Indonesia" else "Image uploaded", use_container_width=True)
+            if st.button("🔍 Prediksi dari Upload" if lang == "Indonesia" else "🔍 Predict from Upload"):
+                with st.spinner("Memproses..." if lang == "Indonesia" else "Processing..."):
                     label, probs = predict(img)
                     conf = float(np.max(probs) * 100)
-                st.subheader("Hasil Prediksi (Upload)")
+                st.subheader("Hasil Prediksi (Upload)" if lang == "Indonesia" else "Prediction Result (Upload)")
                 st.write(f"**Label:** `{label}`")
-                st.write(f"**Confidence:** `{conf:.2f}%`")
+                st.write(f"**Kepercayaan:** `{conf:.2f}%`" if lang == "Indonesia" else f"**Confidence:** `{conf:.2f}%`")
                 add_to_history("Upload", label, conf)
                 if show_prob:
                     df = pd.DataFrame({
@@ -183,42 +192,15 @@ if menu_choice == "Upload Gambar":
                     st.dataframe(df)
                     st.bar_chart(df.set_index("Class"))
         except Exception:
-            st.error("File yang diupload tidak bisa dibaca sebagai gambar. Pastikan format JPG/PNG.")
+            st.error("File yang diupload tidak bisa dibaca sebagai gambar. Pastikan format JPG/PNG." if lang == "Indonesia" else "Uploaded file is not a valid image. Please use JPG/PNG.")
 
 # --- Menu Kamera ---
-elif menu_choice == "Kamera":
-    st.header("📸 Ambil Foto dengan Kamera")
-    camera_file = st.camera_input("Klik 'Open Camera' lalu ambil gambar")
+elif menu_choice.startswith("Kamera") or menu_choice.startswith("Camera"):
+    st.header("📸 Ambil Foto dengan Kamera" if lang == "Indonesia" else "📸 Take Photo with Camera")
+    camera_file = st.camera_input("Klik 'Open Camera' lalu ambil gambar" if lang == "Indonesia" else "Click 'Open Camera' then take a photo")
     if camera_file:
         try:
             img = Image.open(camera_file)
-            st.image(img, caption="Foto dari kamera", use_container_width=True)
-            if st.button("🔍 Prediksi dari Kamera"):
-                with st.spinner("Memproses..."):
-                    label, probs = predict(img)
-                    conf = float(np.max(probs) * 100)
-                st.subheader("Hasil Prediksi (Kamera)")
-                st.write(f"**Label:** `{label}`")
-                st.write(f"**Confidence:** `{conf:.2f}%`")
-                add_to_history("Kamera", label, conf)
-                if show_prob:
-                    df = pd.DataFrame({
-                        "Class": list(idx_to_class.values()),
-                        "Probability": [round(float(p) * 100, 2) for p in probs]
-                    })
-                    st.dataframe(df)
-                    st.bar_chart(df.set_index("Class"))
-        except Exception:
-            st.error("Foto dari kamera tidak bisa dibaca. Silakan coba lagi.")
-
-# --- Menu Data Prediksi ---
-elif menu_choice == "📊 Data Prediksi":
-    st.header("📊 Data Prediksi")
-    if st.session_state["history"]:
-        df_hist = pd.DataFrame(st.session_state["history"])
-        st.dataframe(df_hist)
-        if st.button("🗑️ Hapus Semua Data Prediksi"):
-            clear_history()
-            st.success("Data prediksi berhasil dihapus.")
-    else:
-        st.info("Belum ada data prediksi yang tersimpan.")
+            st.image(img, caption="Foto dari kamera" if lang == "Indonesia" else "Photo from camera", use_container_width=True)
+            if st.button("🔍 Prediksi dari Kamera" if lang == "Indonesia" else "🔍 Predict from Camera"):
+                with st.spinner("Memproses..."
