@@ -97,7 +97,6 @@ def load_model_and_classes():
     25: 'pineapple (nanas)', 26: 'pomegranate (delima)', 27: 'potato (kentang)', 28: 'raddish (lobak)',
     29: 'soy beans (kedelai)', 30: 'spinach (bayam)', 31: 'sweetcorn (jagung manis)', 32: 'sweetpotato (ubi jalar)',
     33: 'tomato (tomat)', 34: 'turnip (lobak putih)', 35: 'watermelon (semangka)', 
-    36: 'strawberry (stroberi)'   # ✅ tambahan kelas ke-36
 }
 
 
@@ -252,5 +251,6 @@ elif menu_choice == "📊 Data Prediksi":
             st.success("Data prediksi berhasil dihapus.")
     else:
         st.info("Belum ada data prediksi yang tersimpan.")
+
 
 
