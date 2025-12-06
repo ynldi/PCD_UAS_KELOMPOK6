@@ -246,4 +246,5 @@ if menu_choice == "Upload Gambar":
                     })
                     st.dataframe(df)
                     st.bar_chart(df.set_index("Class"))
-        except Exception
+        except Exception:
+
