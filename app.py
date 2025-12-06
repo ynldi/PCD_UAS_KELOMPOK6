@@ -87,15 +87,16 @@ def load_model_and_classes():
             data = json.load(f)
         idx_to_class = {int(k): v for k, v in data.items()}
     else:
+        # Tambahkan label dengan bahasa Indonesia
         idx_to_class = {
-            0: 'apple', 1: 'banana', 2: 'beetroot', 3: 'bell pepper', 4: 'cabbage',
-            5: 'capsicum', 6: 'carrot', 7: 'cauliflower', 8: 'chilli pepper', 9: 'corn',
-            10: 'cucumber', 11: 'eggplant', 12: 'garlic', 13: 'ginger', 14: 'grapes',
-            15: 'jalepeno', 16: 'kiwi', 17: 'lemon', 18: 'lettuce', 19: 'mango',
-            20: 'onion', 21: 'orange', 22: 'paprika', 23: 'pear', 24: 'peas',
-            25: 'pineapple', 26: 'pomegranate', 27: 'potato', 28: 'raddish',
-            29: 'soy beans', 30: 'spinach', 31: 'sweetcorn', 32: 'sweetpotato',
-            33: 'tomato', 34: 'turnip', 35: 'watermelon'
+            0: 'apple (apel)', 1: 'banana (pisang)', 2: 'beetroot (bit)', 3: 'bell pepper (paprika)', 4: 'cabbage (kubis)',
+            5: 'capsicum (cabai hijau)', 6: 'carrot (wortel)', 7: 'cauliflower (kembang kol)', 8: 'chilli pepper (cabai)', 9: 'corn (jagung)',
+            10: 'cucumber (mentimun)', 11: 'eggplant (terong)', 12: 'garlic (bawang putih)', 13: 'ginger (jahe)', 14: 'grapes (anggur)',
+            15: 'jalepeno (jalapeno)', 16: 'kiwi (kiwi)', 17: 'lemon (lemon)', 18: 'lettuce (selada)', 19: 'mango (mangga)',
+            20: 'onion (bawang merah)', 21: 'orange (jeruk)', 22: 'paprika (paprika)', 23: 'pear (pir)', 24: 'peas (kacang polong)',
+            25: 'pineapple (nanas)', 26: 'pomegranate (delima)', 27: 'potato (kentang)', 28: 'raddish (lobak)',
+            29: 'soy beans (kedelai)', 30: 'spinach (bayam)', 31: 'sweetcorn (jagung manis)', 32: 'sweetpotato (ubi jalar)',
+            33: 'tomato (tomat)', 34: 'turnip (lobak putih)', 35: 'watermelon (semangka)'
         }
 
     input_shape = model.input_shape
@@ -234,6 +235,8 @@ elif menu_choice == "Kamera":
         except Exception:
             st.error("Foto dari kamera tidak bisa dibaca. Silakan coba lagi.")
 
+# --- Menu Data
+
 # --- Menu Data Prediksi ---
 elif menu_choice == "📊 Data Prediksi":
     st.header("📊 Data Prediksi")
@@ -247,3 +250,4 @@ elif menu_choice == "📊 Data Prediksi":
             st.success("Data prediksi berhasil dihapus.")
     else:
         st.info("Belum ada data prediksi yang tersimpan.")
+
