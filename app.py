@@ -21,11 +21,9 @@ except:
 os.environ["TF_USE_LEGACY_KERAS"] = "1"
 os.environ["KERAS_BACKEND"] = "tensorflow"
 
-
 class DummyLayer(Layer):
     def call(self, inputs):
         return inputs
-
 
 CUSTOM_OBJECTS = {
     "Functional": tf.keras.Model,
@@ -65,7 +63,6 @@ def extract_model_zip():
         st.error(f"Gagal ekstrak ZIP: {e}")
         st.stop()
 
-
 # =========================
 # LOAD MODEL & KELAS
 # =========================
@@ -90,7 +87,7 @@ def load_model_and_classes():
             data = json.load(f)
         idx_to_class = {int(k): v for k, v in data.items()}
     else:
-        # Label manual (35 kelas)
+        # Tambahkan label dengan bahasa Indonesia
         idx_to_class = {
             0: 'apple (apel)', 1: 'banana (pisang)', 2: 'beetroot (bit)', 3: 'bell pepper (paprika)', 4: 'cabbage (kubis)',
             5: 'capsicum (cabai hijau)', 6: 'carrot (wortel)', 7: 'cauliflower (kembang kol)', 8: 'chilli pepper (cabai)', 9: 'corn (jagung)',
@@ -109,7 +106,6 @@ def load_model_and_classes():
         img_size = (128, 128)
 
     return model, idx_to_class, img_size
-
 
 model, idx_to_class, IMG_SIZE = load_model_and_classes()
 
@@ -140,7 +136,6 @@ def preprocess_image(image, img_size):
     arr = np.expand_dims(arr, axis=0)
     return arr
 
-
 def predict(img):
     x = preprocess_image(img, IMG_SIZE)
     preds = model.predict(x)[0]
@@ -148,13 +143,11 @@ def predict(img):
     label = idx_to_class.get(idx, "Unknown")
     return label, preds
 
-
 # =========================
 # SESSION STATE UNTUK HISTORY
 # =========================
 if "history" not in st.session_state:
     st.session_state["history"] = []
-
 
 def add_to_history(source, label, conf):
     st.session_state["history"].append({
@@ -163,10 +156,8 @@ def add_to_history(source, label, conf):
         "confidence": f"{conf:.2f}%"
     })
 
-
 def clear_history():
     st.session_state["history"] = []
-
 
 # =========================
 # UI STREAMLIT
@@ -242,4 +233,20 @@ elif menu_choice == "Kamera":
                     st.dataframe(df)
                     st.bar_chart(df.set_index("Class"))
         except Exception:
-            st.error("Foto dari
+            st.error("Foto dari kamera tidak bisa dibaca. Silakan coba lagi.")
+
+# --- Menu Data
+
+# --- Menu Data Prediksi ---
+elif menu_choice == "📊 Data Prediksi":
+    st.header("📊 Data Prediksi")
+
+    if st.session_state["history"]:
+        df_hist = pd.DataFrame(st.session_state["history"])
+        st.dataframe(df_hist)
+
+        if st.button("🗑️ Hapus Semua Data Prediksi"):
+            clear_history()
+            st.success("Data prediksi berhasil dihapus.")
+    else:
+        st.info("Belum ada data prediksi yang tersimpan.")
