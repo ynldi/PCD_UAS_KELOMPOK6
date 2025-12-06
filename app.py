@@ -112,42 +112,15 @@ model, idx_to_class, IMG_SIZE = load_model_and_classes()
 # TERJEMAHAN LABEL KE BAHASA INDONESIA
 # =========================
 translation_id = {
-    "apple": "apel",
-    "banana": "pisang",
-    "beetroot": "bit",
-    "bell pepper": "paprika",
-    "cabbage": "kubis",
-    "capsicum": "cabai",
-    "carrot": "wortel",
-    "cauliflower": "kembang kol",
-    "chilli pepper": "cabai pedas",
-    "corn": "jagung",
-    "cucumber": "mentimun",
-    "eggplant": "terong",
-    "garlic": "bawang putih",
-    "ginger": "jahe",
-    "grapes": "anggur",
-    "jalepeno": "jalapeno",
-    "kiwi": "kiwi",
-    "lemon": "lemon",
-    "lettuce": "selada",
-    "mango": "mangga",
-    "onion": "bawang bombay",
-    "orange": "jeruk",
-    "paprika": "paprika",
-    "pear": "pir",
-    "peas": "kacang polong",
-    "pineapple": "nanas",
-    "pomegranate": "delima",
-    "potato": "kentang",
-    "raddish": "lobak",
-    "soy beans": "kedelai",
-    "spinach": "bayam",
-    "sweetcorn": "jagung manis",
-    "sweetpotato": "ubi jalar",
-    "tomato": "tomat",
-    "turnip": "lobak putih",
-    "watermelon": "semangka"
+    "apple": "apel", "banana": "pisang", "beetroot": "bit", "bell pepper": "paprika",
+    "cabbage": "kubis", "capsicum": "cabai", "carrot": "wortel", "cauliflower": "kembang kol",
+    "chilli pepper": "cabai pedas", "corn": "jagung", "cucumber": "mentimun", "eggplant": "terong",
+    "garlic": "bawang putih", "ginger": "jahe", "grapes": "anggur", "jalepeno": "jalapeno",
+    "kiwi": "kiwi", "lemon": "lemon", "lettuce": "selada", "mango": "mangga",
+    "onion": "bawang bombay", "orange": "jeruk", "paprika": "paprika", "pear": "pir",
+    "peas": "kacang polong", "pineapple": "nanas", "pomegranate": "delima", "potato": "kentang",
+    "raddish": "lobak", "soy beans": "kedelai", "spinach": "bayam", "sweetcorn": "jagung manis",
+    "sweetpotato": "ubi jalar", "tomato": "tomat", "turnip": "lobak putih", "watermelon": "semangka"
 }
 
 # =========================
@@ -247,4 +220,8 @@ if menu_choice == "Upload Gambar":
                     st.dataframe(df)
                     st.bar_chart(df.set_index("Class"))
         except Exception:
+            st.error("File yang diupload tidak bisa dibaca sebagai gambar. Pastikan format JPG/PNG.")
 
+# --- Menu Kamera ---
+elif menu_choice == "Kamera":
+    st.header("📸
