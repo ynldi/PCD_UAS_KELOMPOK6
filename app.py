@@ -1,7 +1,6 @@
 import os
 import json
 import zipfile
-
 import streamlit as st
 import numpy as np
 import pandas as pd
@@ -34,7 +33,7 @@ CUSTOM_OBJECTS = {
 }
 
 # =========================
-#  CONFIG HALAMAN
+# CONFIG HALAMAN
 # =========================
 st.set_page_config(
     page_title="Fruits & Vegetables Classifier",
@@ -43,7 +42,7 @@ st.set_page_config(
 )
 
 # =========================
-#  EKSTRAK MODEL ZIP
+# EKSTRAK MODEL ZIP
 # =========================
 def extract_model_zip():
     zip_path = "cnn_model.zip"
@@ -62,7 +61,7 @@ def extract_model_zip():
         st.stop()
 
 # =========================
-#  LOAD MODEL & KELAS
+# LOAD MODEL & KELAS
 # =========================
 @st.cache_resource
 def load_model_and_classes():
@@ -103,7 +102,7 @@ def load_model_and_classes():
 model, idx_to_class, IMG_SIZE = load_model_and_classes()
 
 # =========================
-#  PREPROCESS & PREDIKSI
+# PREPROCESS & PREDIKSI
 # =========================
 def preprocess_image(image, img_size):
     if image.mode != "RGB":
@@ -130,7 +129,7 @@ def predict(img):
     return label, preds
 
 # =========================
-#  SESSION STATE UNTUK HISTORY
+# SESSION STATE UNTUK HISTORY
 # =========================
 if "history" not in st.session_state:
     st.session_state["history"] = []
@@ -146,7 +145,7 @@ def clear_history():
     st.session_state["history"] = []
 
 # =========================
-#  UI STREAMLIT
+# UI STREAMLIT
 # =========================
 if os.path.exists("banner.png"):
     st.image("banner.png", use_container_width=True)
@@ -203,4 +202,4 @@ elif menu_choice.startswith("Kamera") or menu_choice.startswith("Camera"):
             img = Image.open(camera_file)
             st.image(img, caption="Foto dari kamera" if lang == "Indonesia" else "Photo from camera", use_container_width=True)
             if st.button("🔍 Prediksi dari Kamera" if lang == "Indonesia" else "🔍 Predict from Camera"):
-                with st.spinner("Memproses..."
+                with
