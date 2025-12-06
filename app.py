@@ -109,6 +109,48 @@ def load_model_and_classes():
 model, idx_to_class, IMG_SIZE = load_model_and_classes()
 
 # =========================
+# TERJEMAHAN LABEL KE BAHASA INDONESIA
+# =========================
+translation_id = {
+    "apple": "apel",
+    "banana": "pisang",
+    "beetroot": "bit",
+    "bell pepper": "paprika",
+    "cabbage": "kubis",
+    "capsicum": "cabai",
+    "carrot": "wortel",
+    "cauliflower": "kembang kol",
+    "chilli pepper": "cabai pedas",
+    "corn": "jagung",
+    "cucumber": "mentimun",
+    "eggplant": "terong",
+    "garlic": "bawang putih",
+    "ginger": "jahe",
+    "grapes": "anggur",
+    "jalepeno": "jalapeno",
+    "kiwi": "kiwi",
+    "lemon": "lemon",
+    "lettuce": "selada",
+    "mango": "mangga",
+    "onion": "bawang bombay",
+    "orange": "jeruk",
+    "paprika": "paprika",
+    "pear": "pir",
+    "peas": "kacang polong",
+    "pineapple": "nanas",
+    "pomegranate": "delima",
+    "potato": "kentang",
+    "raddish": "lobak",
+    "soy beans": "kedelai",
+    "spinach": "bayam",
+    "sweetcorn": "jagung manis",
+    "sweetpotato": "ubi jalar",
+    "tomato": "tomat",
+    "turnip": "lobak putih",
+    "watermelon": "semangka"
+}
+
+# =========================
 # PREPROCESS & PREDIKSI
 # =========================
 def preprocess_image(image, img_size):
@@ -187,11 +229,15 @@ if menu_choice == "Upload Gambar":
                     label, probs = predict(img)
                     conf = float(np.max(probs) * 100)
 
+                # Tambahkan terjemahan Indonesia
+                label_id = translation_id.get(label, "")
+                label_display = f"{label} ({label_id})" if label_id else label
+
                 st.subheader("Hasil Prediksi (Upload)")
-                st.write(f"**Label:** `{label}`")
+                st.write(f"**Label:** `{label_display}`")
                 st.write(f"**Confidence:** `{conf:.2f}%`")
 
-                add_to_history("Upload", label, conf)
+                add_to_history("Upload", label_display, conf)
 
                 if show_prob:
                     df = pd.DataFrame({
@@ -200,50 +246,4 @@ if menu_choice == "Upload Gambar":
                     })
                     st.dataframe(df)
                     st.bar_chart(df.set_index("Class"))
-        except Exception:
-            st.error("File yang diupload tidak bisa dibaca sebagai gambar. Pastikan format JPG/PNG.")
-
-# --- Menu Kamera ---
-elif menu_choice == "Kamera":
-    st.header("📸 Ambil Foto dengan Kamera")
-    camera_file = st.camera_input("Klik 'Open Camera' lalu ambil gambar")
-
-    if camera_file:
-        try:
-            img = Image.open(camera_file)
-            st.image(img, caption="Foto dari kamera", use_container_width=True)
-
-            if st.button("🔍 Prediksi dari Kamera"):
-                with st.spinner("Memproses..."):
-                    label, probs = predict(img)
-                    conf = float(np.max(probs) * 100)
-
-                st.subheader("Hasil Prediksi (Kamera)")
-                st.write(f"**Label:** `{label}`")
-                st.write(f"**Confidence:** `{conf:.2f}%`")
-
-                add_to_history("Kamera", label, conf)
-
-                if show_prob:
-                    df = pd.DataFrame({
-                        "Class": list(idx_to_class.values()),
-                        "Probability": [round(float(p) * 100, 2) for p in probs]
-                    })
-                    st.dataframe(df)
-                    st.bar_chart(df.set_index("Class"))
-        except Exception:
-            st.error("Foto dari kamera tidak bisa dibaca. Silakan coba lagi.")
-
-# --- Menu Data Prediksi ---
-elif menu_choice == "📊 Data Prediksi":
-    st.header("📊 Data Prediksi")
-
-    if st.session_state["history"]:
-        df_hist = pd.DataFrame(st.session_state["history"])
-        st.dataframe(df_hist)
-
-        if st.button("🗑️ Hapus Semua Data Prediksi"):
-            clear_history()
-            st.success("Data prediksi berhasil dihapus.")
-    else:
-        st.info("Belum ada data prediksi yang tersimpan.")
+        except Exception
