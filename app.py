@@ -154,64 +154,69 @@ if os.path.exists("banner.png"):
     st.image("banner.png", use_container_width=True)
 
 st.title("🥕 Fruits and Vegetables Classification")
-st.write("Pilih metode input: upload file atau ambil foto dengan kamera.")
 
-# Sidebar menu terpisah
-st.sidebar.header("📂 Menu Upload")
-show_prob_upload = st.sidebar.checkbox("Tampilkan probabilitas Upload", True)
+# Sidebar menu dengan pilihan
+st.sidebar.title("🔧 Pengaturan & Input")
+menu_choice = st.sidebar.radio("Pilih metode input:", ["Upload Gambar", "Kamera"])
 
-st.sidebar.header("📸 Menu Kamera")
-show_prob_camera = st.sidebar.checkbox("Tampilkan probabilitas Kamera", True)
-
+show_prob = st.sidebar.checkbox("Tampilkan tabel probabilitas", True)
 st.sidebar.markdown("---")
 st.sidebar.write(f"Model input size: **{IMG_SIZE[0]}×{IMG_SIZE[1]}**")
 
 # --- Menu Upload File ---
-st.header("📂 Upload Gambar")
-uploaded = st.file_uploader("Upload gambar buah/sayur:", type=["jpg", "jpeg", "png"])
+if menu_choice == "Upload Gambar":
+    st.header("📂 Upload Gambar")
+    uploaded = st.file_uploader("Upload gambar buah/sayur:", type=["jpg", "jpeg", "png"])
 
-if uploaded:
-    img = Image.open(uploaded)
-    st.image(img, caption="Gambar diupload", use_container_width=True)
+    if uploaded:
+        try:
+            img = Image.open(uploaded)
+            st.image(img, caption="Gambar diupload", use_container_width=True)
 
-    if st.button("🔍 Prediksi dari Upload"):
-        with st.spinner("Memproses..."):
-            label, probs = predict(img)
-            conf = float(np.max(probs) * 100)
+            if st.button("🔍 Prediksi dari Upload"):
+                with st.spinner("Memproses..."):
+                    label, probs = predict(img)
+                    conf = float(np.max(probs) * 100)
 
-        st.subheader("Hasil Prediksi (Upload)")
-        st.write(f"**Label:** `{label}`")
-        st.write(f"**Confidence:** `{conf:.2f}%`")
+                st.subheader("Hasil Prediksi (Upload)")
+                st.write(f"**Label:** `{label}`")
+                st.write(f"**Confidence:** `{conf:.2f}%`")
 
-        if show_prob_upload:
-            df = pd.DataFrame({
-                "Class": list(idx_to_class.values()),
-                "Probability": [round(float(p) * 100, 2) for p in probs]
-            })
-            st.dataframe(df)
-            st.bar_chart(df.set_index("Class"))
+                if show_prob:
+                    df = pd.DataFrame({
+                        "Class": list(idx_to_class.values()),
+                        "Probability": [round(float(p) * 100, 2) for p in probs]
+                    })
+                    st.dataframe(df)
+                    st.bar_chart(df.set_index("Class"))
+        except Exception:
+            st.error("File yang diupload tidak bisa dibaca sebagai gambar. Pastikan format JPG/PNG.")
 
 # --- Menu Kamera ---
-st.header("📸 Ambil Foto dengan Kamera")
-camera_file = st.camera_input("Klik 'Open Camera' lalu ambil gambar")
+elif menu_choice == "Kamera":
+    st.header("📸 Ambil Foto dengan Kamera")
+    camera_file = st.camera_input("Klik 'Open Camera' lalu ambil gambar")
 
-if camera_file:
-    img = Image.open(camera_file)
-    st.image(img, caption="Foto dari kamera", use_container_width=True)
+    if camera_file:
+        try:
+            img = Image.open(camera_file)
+            st.image(img, caption="Foto dari kamera", use_container_width=True)
 
-    if st.button("🔍 Prediksi dari Kamera"):
-        with st.spinner("Memproses..."):
-            label, probs = predict(img)
-            conf = float(np.max(probs) * 100)
+            if st.button("🔍 Prediksi dari Kamera"):
+                with st.spinner("Memproses..."):
+                    label, probs = predict(img)
+                    conf = float(np.max(probs) * 100)
 
-        st.subheader("Hasil Prediksi (Kamera)")
-        st.write(f"**Label:** `{label}`")
-        st.write(f"**Confidence:** `{conf:.2f}%`")
+                st.subheader("Hasil Prediksi (Kamera)")
+                st.write(f"**Label:** `{label}`")
+                st.write(f"**Confidence:** `{conf:.2f}%`")
 
-        if show_prob_camera:
-            df = pd.DataFrame({
-                "Class": list(idx_to_class.values()),
-                "Probability": [round(float(p) * 100, 2) for p in probs]
-            })
-            st.dataframe(df)
-            st.bar_chart(df.set_index("Class"))
+                if show_prob:
+                    df = pd.DataFrame({
+                        "Class": list(idx_to_class.values()),
+                        "Probability": [round(float(p) * 100, 2) for p in probs]
+                    })
+                    st.dataframe(df)
+                    st.bar_chart(df.set_index("Class"))
+        except Exception:
+            st.error("Foto dari kamera tidak bisa dibaca. Silakan coba lagi.")
