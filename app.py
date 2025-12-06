@@ -90,7 +90,7 @@ def load_model_and_classes():
             data = json.load(f)
         idx_to_class = {int(k): v for k, v in data.items()}
     else:
-        # Tambahkan label dengan bahasa Indonesia (36 kelas)
+        # Label manual (35 kelas)
         idx_to_class = {
             0: 'apple (apel)', 1: 'banana (pisang)', 2: 'beetroot (bit)', 3: 'bell pepper (paprika)', 4: 'cabbage (kubis)',
             5: 'capsicum (cabai hijau)', 6: 'carrot (wortel)', 7: 'cauliflower (kembang kol)', 8: 'chilli pepper (cabai)', 9: 'corn (jagung)',
@@ -99,7 +99,7 @@ def load_model_and_classes():
             20: 'onion (bawang merah)', 21: 'orange (jeruk)', 22: 'paprika (paprika)', 23: 'pear (pir)', 24: 'peas (kacang polong)',
             25: 'pineapple (nanas)', 26: 'pomegranate (delima)', 27: 'potato (kentang)', 28: 'raddish (lobak)',
             29: 'soy beans (kedelai)', 30: 'spinach (bayam)', 31: 'sweetcorn (jagung manis)', 32: 'sweetpotato (ubi jalar)',
-            33: 'tomato (tomat)', 34: 'turnip (lobak putih)', 35: 'watermelon (semangka)', 36: 'strawberry (stroberi)'
+            33: 'tomato (tomat)', 34: 'turnip (lobak putih)', 35: 'watermelon (semangka)'
         }
 
     input_shape = model.input_shape
@@ -241,3 +241,5 @@ elif menu_choice == "Kamera":
                     })
                     st.dataframe(df)
                     st.bar_chart(df.set_index("Class"))
+        except Exception:
+            st.error("Foto dari
