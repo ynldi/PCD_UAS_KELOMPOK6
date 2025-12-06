@@ -5,7 +5,7 @@ import zipfile
 import streamlit as st
 import numpy as np
 import pandas as pd
-from PIL import Image
+from PIL import Image, ImageEnhance
 
 # ======================
 #   PATCH KOMPATIBILITAS MODEL .H5
@@ -120,7 +120,22 @@ def preprocess_image(image, img_size):
     if image.mode != "RGB":
         image = image.convert("RGB")
 
+    # Crop tengah agar objek lebih fokus
+    w, h = image.size
+    min_side = min(w, h)
+    left = (w - min_side) // 2
+    top = (h - min_side) // 2
+    right = left + min_side
+    bottom = top + min_side
+    image = image.crop((left, top, right, bottom))
+
+    # Resize ke ukuran input model
     image = image.resize(img_size)
+
+    # Normalisasi brightness agar lebih konsisten
+    enhancer = ImageEnhance.Brightness(image)
+    image = enhancer.enhance(1.2)
+
     arr = np.array(image).astype("float32") / 255.0
     arr = np.expand_dims(arr, axis=0)
     return arr
@@ -141,8 +156,14 @@ if os.path.exists("banner.png"):
 st.title("🥕 Fruits and Vegetables Classification")
 st.write("Pilih metode input: upload file atau ambil foto dengan kamera.")
 
-st.sidebar.header("Pengaturan")
-show_prob = st.sidebar.checkbox("Tampilkan probabilitas", True)
+# Sidebar menu terpisah
+st.sidebar.header("📂 Menu Upload")
+show_prob_upload = st.sidebar.checkbox("Tampilkan probabilitas Upload", True)
+
+st.sidebar.header("📸 Menu Kamera")
+show_prob_camera = st.sidebar.checkbox("Tampilkan probabilitas Kamera", True)
+
+st.sidebar.markdown("---")
 st.sidebar.write(f"Model input size: **{IMG_SIZE[0]}×{IMG_SIZE[1]}**")
 
 # --- Menu Upload File ---
@@ -162,7 +183,7 @@ if uploaded:
         st.write(f"**Label:** `{label}`")
         st.write(f"**Confidence:** `{conf:.2f}%`")
 
-        if show_prob:
+        if show_prob_upload:
             df = pd.DataFrame({
                 "Class": list(idx_to_class.values()),
                 "Probability": [round(float(p) * 100, 2) for p in probs]
@@ -187,7 +208,7 @@ if camera_file:
         st.write(f"**Label:** `{label}`")
         st.write(f"**Confidence:** `{conf:.2f}%`")
 
-        if show_prob:
+        if show_prob_camera:
             df = pd.DataFrame({
                 "Class": list(idx_to_class.values()),
                 "Probability": [round(float(p) * 100, 2) for p in probs]
