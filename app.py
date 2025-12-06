@@ -139,35 +139,26 @@ if os.path.exists("banner.png"):
     st.image("banner.png", use_container_width=True)
 
 st.title("🥕 Fruits and Vegetables Classification")
-st.write("Upload gambar buah/sayur atau gunakan kamera untuk memprediksi.")
+st.write("Pilih metode input: upload file atau ambil foto dengan kamera.")
 
 st.sidebar.header("Pengaturan")
 show_prob = st.sidebar.checkbox("Tampilkan probabilitas", True)
 st.sidebar.write(f"Model input size: **{IMG_SIZE[0]}×{IMG_SIZE[1]}**")
 
-# --- Upload file ---
-uploaded = st.file_uploader("Upload gambar:", type=["jpg", "jpeg", "png"])
+# --- Menu Upload File ---
+st.header("📂 Upload Gambar")
+uploaded = st.file_uploader("Upload gambar buah/sayur:", type=["jpg", "jpeg", "png"])
 
-# --- Kamera input ---
-camera_file = st.camera_input("Ambil gambar dengan kamera")
+if uploaded:
+    img = Image.open(uploaded)
+    st.image(img, caption="Gambar diupload", use_container_width=True)
 
-# Tentukan sumber gambar
-img_source = None
-if uploaded is not None:
-    img_source = uploaded
-elif camera_file is not None:
-    img_source = camera_file
-
-if img_source:
-    img = Image.open(img_source)
-    st.image(img, caption="Gambar dipilih", use_container_width=True)
-
-    if st.button("🔍 Prediksi"):
+    if st.button("🔍 Prediksi dari Upload"):
         with st.spinner("Memproses..."):
             label, probs = predict(img)
             conf = float(np.max(probs) * 100)
 
-        st.subheader("Hasil Prediksi")
+        st.subheader("Hasil Prediksi (Upload)")
         st.write(f"**Label:** `{label}`")
         st.write(f"**Confidence:** `{conf:.2f}%`")
 
@@ -178,5 +169,28 @@ if img_source:
             })
             st.dataframe(df)
             st.bar_chart(df.set_index("Class"))
-else:
-    st.info("Silakan upload gambar atau gunakan kamera 👆")
+
+# --- Menu Kamera ---
+st.header("📸 Ambil Foto dengan Kamera")
+camera_file = st.camera_input("Klik 'Open Camera' lalu ambil gambar")
+
+if camera_file:
+    img = Image.open(camera_file)
+    st.image(img, caption="Foto dari kamera", use_container_width=True)
+
+    if st.button("🔍 Prediksi dari Kamera"):
+        with st.spinner("Memproses..."):
+            label, probs = predict(img)
+            conf = float(np.max(probs) * 100)
+
+        st.subheader("Hasil Prediksi (Kamera)")
+        st.write(f"**Label:** `{label}`")
+        st.write(f"**Confidence:** `{conf:.2f}%`")
+
+        if show_prob:
+            df = pd.DataFrame({
+                "Class": list(idx_to_class.values()),
+                "Probability": [round(float(p) * 100, 2) for p in probs]
+            })
+            st.dataframe(df)
+            st.bar_chart(df.set_index("Class"))
